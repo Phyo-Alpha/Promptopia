@@ -3,6 +3,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import PromptCard from "./PromptCard";
+import { useRouter } from "next/navigation";
 
 const PromptCardList = ({ data, handleTagClick }) => {
   return (
@@ -21,24 +22,55 @@ const PromptCardList = ({ data, handleTagClick }) => {
 };
 
 const Feed = () => {
+  const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [prompts, setPrompts] = useState([]);
+  const [reload, setReload] = useState(false);
 
-  const handleSearchChange = (e) => {};
+  const handleSearchChange = (e) => {
+    setSearchText(e.target.value);
+
+    if (e.target.value === "") {
+      setReload(!reload);
+    } else {
+      // search for prompts that includes the search text in their tag or creator username
+
+      e.preventDefault();
+      try {
+        if (searchText === "") {
+          return;
+        }
+
+        const searchResults = prompts.filter((prompt) => {
+          return (
+            prompt.tag.includes(searchText) ||
+            prompt.creator.username.includes(searchText)
+          );
+        });
+
+        setPrompts(searchResults);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleTagClick = (tag) => {
+    router.push(`/tag/${tag.replace("#", "")}`);
+  };
 
   useEffect(() => {
     const fetchPrompts = async () => {
       const response = await fetch("api/prompt");
       const data = await response.json();
-      console.log(data);
       setPrompts(data);
     };
     fetchPrompts();
-  }, []);
+  }, [reload]);
 
   return (
     <section className="feed">
-      <form className="relative w-full flex-center">
+      <form className="relative w-full flex-center flex-col gap-3">
         <input
           type="text"
           placeholder="Search for a tag or a username"
@@ -49,7 +81,7 @@ const Feed = () => {
         />
       </form>
 
-      <PromptCardList data={prompts} handleTagClick={() => {}} />
+      <PromptCardList data={prompts} handleTagClick={handleTagClick} />
     </section>
   );
 };
