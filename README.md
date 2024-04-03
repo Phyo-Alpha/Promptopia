@@ -1,5 +1,5 @@
 # Tasks left to finish
 
-- [ ] Implement Search functionality at home
-- [ ] Implement Click on Tag
+- [X] Implement Search functionality at home
+- [X] Implement Click on Tag
 - [ ] Implement View other profiles

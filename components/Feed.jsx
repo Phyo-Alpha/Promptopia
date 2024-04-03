@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import PromptCard from "./PromptCard";
 import { useRouter } from "next/navigation";
 
-const PromptCardList = ({ data, handleTagClick }) => {
+const PromptCardList = ({ data, handleTagClick, handleProfilePicClick }) => {
   return (
     <div className="mt-16 prompt_layout">
       {data.map((prompt) => {
@@ -13,6 +13,7 @@ const PromptCardList = ({ data, handleTagClick }) => {
           <PromptCard
             key={prompt._id}
             prompt={prompt}
+            handleProfilePicClick={handleProfilePicClick}
             handleTagClick={handleTagClick}
           />
         );
@@ -59,6 +60,10 @@ const Feed = () => {
     router.push(`/tag/${tag.replace("#", "")}`);
   };
 
+  const handleProfilePicClick = (userId) => {
+    router.push(`/profile/${userId}`);
+  };
+
   useEffect(() => {
     const fetchPrompts = async () => {
       const response = await fetch("api/prompt");
@@ -81,7 +86,11 @@ const Feed = () => {
         />
       </form>
 
-      <PromptCardList data={prompts} handleTagClick={handleTagClick} />
+      <PromptCardList
+        data={prompts}
+        handleTagClick={handleTagClick}
+        handleProfilePicClick={handleProfilePicClick}
+      />
     </section>
   );
 };

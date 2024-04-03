@@ -47,7 +47,7 @@ const UserProfile = () => {
 
   return (
     <Profile
-      name="My"
+      name="My Profile"
       desc="Welcome to your personalized profile page."
       data={prompts}
       handleEdit={handleEdit}

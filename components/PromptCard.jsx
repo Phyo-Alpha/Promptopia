@@ -6,7 +6,13 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 
-const PromptCard = ({ prompt, handleTagClick, handleEdit, handleDelete }) => {
+const PromptCard = ({
+  prompt,
+  handleTagClick,
+  handleEdit,
+  handleDelete,
+  handleProfilePicClick,
+}) => {
   const { data: session } = useSession();
   const pathName = usePathname();
   const router = useRouter();
@@ -28,9 +34,13 @@ const PromptCard = ({ prompt, handleTagClick, handleEdit, handleDelete }) => {
             width={40}
             height={40}
             className="rounded-full object-contain"
+            onClick={() => handleProfilePicClick(prompt.creator._id)}
           />
 
-          <div className="flex flex-col">
+          <div
+            className="flex flex-col"
+            onClick={() => handleProfilePicClick(prompt.creator._id)}
+          >
             <h3 className="font-satoshi font-semibold text-gray-900">
               {prompt.creator.username}
             </h3>
